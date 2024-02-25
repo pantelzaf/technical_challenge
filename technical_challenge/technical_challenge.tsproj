@@ -13,15 +13,23 @@
 		</System>
 		<Plc>
 			<Project GUID="{056425DA-752F-4E0D-821B-F52E309373AD}" Name="technical_challenge" PrjFilePath="technical_challenge\technical_challenge.plcproj" TmcFilePath="technical_challenge\technical_challenge.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="technical_challenge\technical_challenge.tmc" TmcHash="{36FBA78F-8986-4E93-E770-7D52D7BD90A9}">
 					<Name>technical_challenge Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id>0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>

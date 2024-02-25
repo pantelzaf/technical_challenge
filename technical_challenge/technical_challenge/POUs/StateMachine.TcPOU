@@ -8,7 +8,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	i : INT;
-	state : States;
+	State : States;
 	TimerRotateDisc : TON;
 	TimerLinearFW : TON;
 	TimerGripperLower : TON;
@@ -17,11 +17,10 @@ VAR
 	TimerGripperLift: TON;
 	TimerLinearBW : TON;
 	Start: BOOL:=FALSE;
-	start2: BOOL:=FALSE;
 	CyclesCounter: CTU;
 	TotalCyclesCounter : INT:=0;
 	Reset : BOOL;
-	COUNTER : INT:= 1000;
+	NumberOfSlots : INT := 6;
 	CylinderInDisc : ARRAY[1..6] OF BOOL := [FALSE, TRUE, TRUE, TRUE, TRUE, TRUE] ;
 	Sensor: BOOL:= CylinderInDisc[4];
 	PutCylinderInSlot6 : BOOL;
@@ -342,7 +341,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"state = States.LINEAR_FW"</v>
+                            <v n="Value">"State = States.LINEAR_FW"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">428L</v>
@@ -525,7 +524,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"state = States.GRIPPER_LOWER_AND_OPEN"</v>
+                            <v n="Value">"State = States.GRIPPER_LOWER_AND_OPEN"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">502L</v>
@@ -944,7 +943,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"state = States.GRIPPER_CLOSE"</v>
+                            <v n="Value">"State = States.GRIPPER_CLOSE"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">621L</v>
@@ -1127,7 +1126,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"state = States.GRIPPER_LIFT"</v>
+                            <v n="Value">"State = States.GRIPPER_LIFT"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">640L</v>
@@ -1310,7 +1309,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"state = States.LINEAR_BW"</v>
+                            <v n="Value">"State = States.LINEAR_BW"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">521L</v>
@@ -1910,7 +1909,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[TimerGripperLower(IN:=TRUE, PT:=T#5S);
 IF TimerGripperLower.Q THEN
-	state := States.GRIPPER_CLOSE;
+	State := States.GRIPPER_CLOSE;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -1918,7 +1917,7 @@ END_IF]]></ST>
       <Implementation>
         <ST><![CDATA[TimerGripperClose(IN:=TRUE, PT:=T#1S);
 IF TimerGripperClose.Q THEN
-	state := States.GRIPPER_LIFT;
+	State := States.GRIPPER_LIFT;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -1927,7 +1926,7 @@ END_IF]]></ST>
         <ST><![CDATA[TimerGripperLift(IN:=TRUE, PT:=T#5S);
 IF TimerGripperLift.Q THEN
 	CylinderInDisc[1] := FALSE;
-	state := States.LINEAR_BW;
+	State := States.LINEAR_BW;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -1948,15 +1947,14 @@ TimerGripperClose(IN:=FALSE);
 TimerGripperLift(IN:=FALSE);
 TimerLinearBW(IN:=FALSE);
 Reset := CyclesCounter.Q;
-CyclesCounter(CU:=state = States.ROTATE_DISC, RESET := Reset, PV:=6);
-]]></ST>
+CyclesCounter(CU:=state = States.ROTATE_DISC, RESET := Reset, PV:=INT_TO_WORD(NumberOfSlots));]]></ST>
       </Implementation>
     </Action>
     <Action Name="LINEAR_BW_active" Id="{04b344ae-3198-4f12-b7a5-389db0f028f0}">
       <Implementation>
         <ST><![CDATA[TimerLinearBW(IN:=TRUE, PT:=T#2S);
 IF TimerLinearBW.Q THEN
-	state := States.ROTATE_DISC;
+	State := States.ROTATE_DISC;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -1964,7 +1962,7 @@ END_IF]]></ST>
       <Implementation>
         <ST><![CDATA[TimerLinearFW(IN:=TRUE, PT:=T#2S);
 IF TimerLinearFW.Q THEN
-	state := States.GRIPPER_LOWER_AND_OPEN;
+	State := States.GRIPPER_LOWER_AND_OPEN;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -1979,7 +1977,7 @@ IF TimerRotateDisc.Q THEN
 	END_FOR;
 	CylinderInDisc[6] := PutCylinderInSlot6;
 	IF CylinderInDisc[1] THEN
-		state := States.LINEAR_FW;
+		State := States.LINEAR_FW;
 	END_IF	
 END_IF]]></ST>
       </Implementation>
@@ -2096,7 +2094,6 @@ END_IF]]></ST>
     </LineIds>
     <LineIds Name="StateMachine.Init_entry">
       <LineId Id="2" Count="10" />
-      <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.LINEAR_BW_active">
       <LineId Id="2" Count="2" />

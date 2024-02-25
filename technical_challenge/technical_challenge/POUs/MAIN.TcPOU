@@ -23,7 +23,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[StateMachine();
+      <ST><![CDATA[StateMachine(OutputSignals=> );
 
 fbServer(
 	send_data:= SResponse, 

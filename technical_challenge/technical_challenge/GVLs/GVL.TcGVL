@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL" Id="{3bb663e6-a027-427f-b62c-66381f90fed6}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	NUMBER_OF_SLOTS : INT := 6;
+	SENSOR_POSITION_IN_DISC : INT := 4;
+	
+	ROTATE_DISC_TIME: TIME := T#1S;
+	LINEAR_FW_TIME: TIME := T#1500MS;
+	GRIPPER_LOWER_TIME: TIME := T#1S;
+	GRIPPER_OPEN_TIME: TIME := T#500MS;
+	GRIPPER_CLOSE_TIME: TIME := T#500MS;
+	GRIPPER_LIFT_TIME: TIME := T#1S;
+	GRIPPER_LINEAR_BW_TIME: TIME := T#1500MS;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

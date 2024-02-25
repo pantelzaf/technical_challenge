@@ -5,24 +5,18 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+	OutputSignals : OutputSignals;
 END_VAR
 VAR
 	i : INT;
-	State : States;
-	TimerRotateDisc : TON;
-	TimerLinearFW : TON;
-	TimerGripperLower : TON;
-	TimerGripperOpen : TON;
-	TimerGripperClose: TON;
-	TimerGripperLift: TON;
-	TimerLinearBW : TON;
+	state : States;
+	Timer : Timer;
 	Start: BOOL:=FALSE;
 	CyclesCounter: CTU;
 	TotalCyclesCounter : INT:=0;
 	Reset : BOOL;
-	NumberOfSlots : INT := 6;
-	CylinderInDisc : ARRAY[1..6] OF BOOL := [FALSE, TRUE, TRUE, TRUE, TRUE, TRUE] ;
-	Sensor: BOOL:= CylinderInDisc[4];
+	CylinderInDisc : ARRAY[1..6] OF BOOL := [FALSE,5(TRUE)];
+	Sensor: BOOL:= CylinderInDisc[GVL.SENSOR_POSITION_IN_DISC];
 	PutCylinderInSlot6 : BOOL;
 END_VAR
 ]]></Declaration>
@@ -341,7 +335,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State = States.LINEAR_FW"</v>
+                            <v n="Value">"state = States.LINEAR_FW"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">428L</v>
@@ -524,7 +518,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State = States.GRIPPER_LOWER_AND_OPEN"</v>
+                            <v n="Value">"state = States.GRIPPER_LOWER"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">502L</v>
@@ -583,326 +577,25 @@ END_VAR
                       <v n="Id">501L</v>
                       <v n="IdParent">9L</v>
                     </o>
-                    <o t="SFCBranch">
+                    <o t="SFCStep">
+                      <n n="EmbeddedMainAction" />
+                      <n n="EmbeddedEntryAction" />
+                      <n n="EmbeddedExitAction" />
+                      <l2 n="EmbeddedMainActionProperties" />
+                      <l2 n="EmbeddedEntryActionProperties" />
+                      <l2 n="EmbeddedExitActionProperties" />
                       <o n="ElementList" t="SFCElementList">
-                        <l2 n="InnerList" cet="SFCSegment">
-                          <o>
-                            <o n="ElementList" t="SFCElementList">
-                              <l2 n="InnerList" cet="SFCStep">
-                                <o>
-                                  <n n="EmbeddedMainAction" />
-                                  <n n="EmbeddedEntryAction" />
-                                  <n n="EmbeddedExitAction" />
-                                  <l2 n="EmbeddedMainActionProperties" />
-                                  <l2 n="EmbeddedEntryActionProperties" />
-                                  <l2 n="EmbeddedExitActionProperties" />
-                                  <o n="ElementList" t="SFCElementList">
-                                    <l2 n="InnerList" />
-                                  </o>
-                                  <l2 n="Attributes" cet="SFCAttribute">
-                                    <o>
-                                      <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">"GRIPPER_LOWER"</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">490L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">491L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">492L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
-                                      <o n="Value" t="EnumValue">
-                                        <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
-                                        <n n="BaseType" />
-                                        <v n="Value">"0"</v>
-                                        <v n="DefaultValue">"0"</v>
-                                      </o>
-                                      <v n="Id">493L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{6844a48e-46c2-4cc8-a185-a478f3b99cc0}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">494L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">495L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{cacf1a68-236e-47c2-b7b1-1cf9199718cb}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">496L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{b693554c-1b01-4a8d-afde-9e3a46f7465d}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">497L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">"GRIPPER_active"</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">498L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{a6b08bd8-b696-47e3-9cbf-7408b61c9ff8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">499L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">500L</v>
-                                      <v n="IdParent">489L</v>
-                                    </o>
-                                  </l2>
-                                  <v n="Id">489L</v>
-                                  <v n="IdParent">575L</v>
-                                </o>
-                              </l2>
-                            </o>
-                            <l2 n="Attributes" cet="SFCAttribute">
-                              <o>
-                                <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">""</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">576L</v>
-                                <v n="IdParent">575L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">""</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">577L</v>
-                                <v n="IdParent">575L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                                <o n="Value" t="BoolValue">
-                                  <v n="Value">"FALSE"</v>
-                                  <v n="DefaultValue">"FALSE"</v>
-                                </o>
-                                <v n="Id">578L</v>
-                                <v n="IdParent">575L</v>
-                              </o>
-                            </l2>
-                            <v n="Id">575L</v>
-                            <v n="IdParent">570L</v>
-                          </o>
-                          <o>
-                            <o n="ElementList" t="SFCElementList">
-                              <l2 n="InnerList" cet="SFCStep">
-                                <o>
-                                  <n n="EmbeddedMainAction" />
-                                  <n n="EmbeddedEntryAction" />
-                                  <n n="EmbeddedExitAction" />
-                                  <l2 n="EmbeddedMainActionProperties" />
-                                  <l2 n="EmbeddedEntryActionProperties" />
-                                  <l2 n="EmbeddedExitActionProperties" />
-                                  <o n="ElementList" t="SFCElementList">
-                                    <l2 n="InnerList" />
-                                  </o>
-                                  <l2 n="Attributes" cet="SFCAttribute">
-                                    <o>
-                                      <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">"GRIPPER_OPEN"</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">584L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">585L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">586L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
-                                      <o n="Value" t="EnumValue">
-                                        <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
-                                        <n n="BaseType" />
-                                        <v n="Value">"0"</v>
-                                        <v n="DefaultValue">"0"</v>
-                                      </o>
-                                      <v n="Id">587L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{6844a48e-46c2-4cc8-a185-a478f3b99cc0}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">588L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
-                                      <o n="Value" t="BoolValue">
-                                        <v n="Value">"FALSE"</v>
-                                        <v n="DefaultValue">"FALSE"</v>
-                                      </o>
-                                      <v n="Id">589L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{cacf1a68-236e-47c2-b7b1-1cf9199718cb}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">590L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{b693554c-1b01-4a8d-afde-9e3a46f7465d}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">591L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">"GRIPPER_OPEN_active"</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">592L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{a6b08bd8-b696-47e3-9cbf-7408b61c9ff8}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">593L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                    <o>
-                                      <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
-                                      <o n="Value" t="StringValue">
-                                        <v n="Value">""</v>
-                                        <v n="DefaultValue">""</v>
-                                      </o>
-                                      <v n="Id">594L</v>
-                                      <v n="IdParent">583L</v>
-                                    </o>
-                                  </l2>
-                                  <v n="Id">583L</v>
-                                  <v n="IdParent">579L</v>
-                                </o>
-                              </l2>
-                            </o>
-                            <l2 n="Attributes" cet="SFCAttribute">
-                              <o>
-                                <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">""</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">580L</v>
-                                <v n="IdParent">579L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">""</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">581L</v>
-                                <v n="IdParent">579L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                                <o n="Value" t="BoolValue">
-                                  <v n="Value">"FALSE"</v>
-                                  <v n="DefaultValue">"FALSE"</v>
-                                </o>
-                                <v n="Id">582L</v>
-                                <v n="IdParent">579L</v>
-                              </o>
-                            </l2>
-                            <v n="Id">579L</v>
-                            <v n="IdParent">570L</v>
-                          </o>
-                        </l2>
+                        <l2 n="InnerList" />
                       </o>
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Branch0"</v>
+                            <v n="Value">"GRIPPER_LOWER"</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">571L</v>
-                          <v n="IdParent">570L</v>
+                          <v n="Id">490L</v>
+                          <v n="IdParent">489L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
@@ -910,8 +603,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">572L</v>
-                          <v n="IdParent">570L</v>
+                          <v n="Id">491L</v>
+                          <v n="IdParent">489L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
@@ -919,20 +612,85 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">573L</v>
-                          <v n="IdParent">570L</v>
+                          <v n="Id">492L</v>
+                          <v n="IdParent">489L</v>
                         </o>
                         <o>
-                          <v n="AttributeId">{23bdaa98-72ec-41f7-817b-9dede5697086}</v>
+                          <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
+                          <o n="Value" t="EnumValue">
+                            <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
+                            <n n="BaseType" />
+                            <v n="Value">"0"</v>
+                            <v n="DefaultValue">"0"</v>
+                          </o>
+                          <v n="Id">493L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{6844a48e-46c2-4cc8-a185-a478f3b99cc0}</v>
                           <o n="Value" t="BoolValue">
-                            <v n="Value">"TRUE"</v>
+                            <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">574L</v>
-                          <v n="IdParent">570L</v>
+                          <v n="Id">494L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">495L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{cacf1a68-236e-47c2-b7b1-1cf9199718cb}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">496L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{b693554c-1b01-4a8d-afde-9e3a46f7465d}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">497L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">"GRIPPER_LOWER_active"</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">498L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{a6b08bd8-b696-47e3-9cbf-7408b61c9ff8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">499L</v>
+                          <v n="IdParent">489L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">500L</v>
+                          <v n="IdParent">489L</v>
                         </o>
                       </l2>
-                      <v n="Id">570L</v>
+                      <v n="Id">489L</v>
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
@@ -943,7 +701,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State = States.GRIPPER_CLOSE"</v>
+                            <v n="Value">"state = States.GRIPPER_CLOSE"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">621L</v>
@@ -1126,7 +884,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State = States.GRIPPER_LIFT"</v>
+                            <v n="Value">"state = States.GRIPPER_LIFT"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">640L</v>
@@ -1309,7 +1067,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State = States.LINEAR_BW"</v>
+                            <v n="Value">"state = States.LINEAR_BW"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">521L</v>
@@ -1485,14 +1243,197 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"LINEAR_BW__to__Init"</v>
+                      <v n="VariableName">"LINEAR_BW__to__GRIPPER_OPEN"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"State=States.ROTATE_DISC"</v>
+                            <v n="Value">"state = States.GRIPPER_OPEN"</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">676L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">677L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">678L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
+                          <o n="Value" t="EnumValue">
+                            <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
+                            <n n="BaseType" />
+                            <v n="Value">"0"</v>
+                            <v n="DefaultValue">"0"</v>
+                          </o>
+                          <v n="Id">679L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">680L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{8294df19-5962-4dee-a874-1051dabb0e3e}</v>
+                          <o n="Value" t="EnumValue">
+                            <v n="TemplateGuid">{6ecff51c-9b8f-4338-aab0-67c2b31b07e9}</v>
+                            <n n="BaseType" />
+                            <v n="Value">"0"</v>
+                            <v n="DefaultValue">"0"</v>
+                          </o>
+                          <v n="Id">681L</v>
+                          <v n="IdParent">675L</v>
+                        </o>
+                      </l2>
+                      <v n="Id">675L</v>
+                      <v n="IdParent">9L</v>
+                    </o>
+                    <o t="SFCStep">
+                      <n n="EmbeddedMainAction" />
+                      <n n="EmbeddedEntryAction" />
+                      <n n="EmbeddedExitAction" />
+                      <l2 n="EmbeddedMainActionProperties" />
+                      <l2 n="EmbeddedEntryActionProperties" />
+                      <l2 n="EmbeddedExitActionProperties" />
+                      <o n="ElementList" t="SFCElementList">
+                        <l2 n="InnerList" />
+                      </o>
+                      <l2 n="Attributes" cet="SFCAttribute">
+                        <o>
+                          <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">"GRIPPER_OPEN"</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">699L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">700L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">701L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
+                          <o n="Value" t="EnumValue">
+                            <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
+                            <n n="BaseType" />
+                            <v n="Value">"0"</v>
+                            <v n="DefaultValue">"0"</v>
+                          </o>
+                          <v n="Id">702L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{6844a48e-46c2-4cc8-a185-a478f3b99cc0}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">703L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
+                          <o n="Value" t="BoolValue">
+                            <v n="Value">"FALSE"</v>
+                            <v n="DefaultValue">"FALSE"</v>
+                          </o>
+                          <v n="Id">704L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{cacf1a68-236e-47c2-b7b1-1cf9199718cb}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">705L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{b693554c-1b01-4a8d-afde-9e3a46f7465d}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">706L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">"GRIPPER_OPEN_active"</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">707L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{a6b08bd8-b696-47e3-9cbf-7408b61c9ff8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">708L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                        <o>
+                          <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">""</v>
+                            <v n="DefaultValue">""</v>
+                          </o>
+                          <v n="Id">709L</v>
+                          <v n="IdParent">698L</v>
+                        </o>
+                      </l2>
+                      <v n="Id">698L</v>
+                      <v n="IdParent">9L</v>
+                    </o>
+                    <o t="SFCTransition">
+                      <v n="VariableName">"GRIPPER_OPEN__to__Init"</v>
+                      <n n="EmbeddedTransition" />
+                      <l2 n="EmbeddedTransitionProperties" />
+                      <l2 n="Attributes" cet="SFCAttribute">
+                        <o>
+                          <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
+                          <o n="Value" t="StringValue">
+                            <v n="Value">"state = States.ROTATE_DISC"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">468L</v>
@@ -1892,7 +1833,6 @@ END_VAR
             <Type n="SFCAttribute">{21f3f16e-04fa-4637-b6b7-d84e4192e99f}</Type>
             <Type n="SFCAttributeCategory">{679adacf-f2a4-4167-a3f7-d21cfc5d451f}</Type>
             <Type n="SFCAttributeDescription">{d851789d-af2c-4990-9d48-a7bdc9181773}</Type>
-            <Type n="SFCBranch">{e221b778-bb8f-44ba-8a6a-f796287d4e62}</Type>
             <Type n="SFCElementList">{587d6556-cfe6-4e76-9cc9-fc0daf0c8c29}</Type>
             <Type n="SFCImplementationObject">{74f81948-1328-492c-b6c1-a9ea72048b28}</Type>
             <Type n="SFCJump">{7e39ac27-154f-419a-a255-6a6cf37d5ed0}</Type>
@@ -1905,79 +1845,103 @@ END_VAR
         </XmlArchive>
       </SFC>
     </Implementation>
-    <Action Name="GRIPPER_active" Id="{12b64b9a-ca2e-4622-9620-65a67211656e}">
-      <Implementation>
-        <ST><![CDATA[TimerGripperLower(IN:=TRUE, PT:=T#5S);
-IF TimerGripperLower.Q THEN
-	State := States.GRIPPER_CLOSE;
-END_IF]]></ST>
-      </Implementation>
-    </Action>
     <Action Name="GRIPPER_CLOSE_active" Id="{d691e21a-f8c1-4a63-8118-7801ba5c32fe}">
       <Implementation>
-        <ST><![CDATA[TimerGripperClose(IN:=TRUE, PT:=T#1S);
-IF TimerGripperClose.Q THEN
-	State := States.GRIPPER_LIFT;
+        <ST><![CDATA[Timer.GripperClose(IN:=TRUE, PT:=GVL.GRIPPER_CLOSE_TIME);
+
+OutputSignals.Gripper := FALSE;
+
+IF Timer.GripperClose.Q THEN
+	state := States.GRIPPER_LIFT;
 END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="GRIPPER_LIFT_active" Id="{4cd9cfc3-9895-41ad-abcb-f725e0d1d34a}">
       <Implementation>
-        <ST><![CDATA[TimerGripperLift(IN:=TRUE, PT:=T#5S);
-IF TimerGripperLift.Q THEN
+        <ST><![CDATA[Timer.GripperLift(IN:=TRUE, PT:=GVL.GRIPPER_LIFT_TIME);
+
+OutputSignals.GripperMotor := BOOL_TO_INT(NOT Timer.GripperLift.Q);
+
+IF Timer.GripperLift.Q THEN
 	CylinderInDisc[1] := FALSE;
-	State := States.LINEAR_BW;
+	state := States.LINEAR_BW;
 END_IF]]></ST>
       </Implementation>
     </Action>
-    <Action Name="GRIPPER_OPEN_active" Id="{4fe590ed-dd1f-4566-b062-3ce9048b6aaf}">
+    <Action Name="GRIPPER_LOWER_active" Id="{12b64b9a-ca2e-4622-9620-65a67211656e}">
       <Implementation>
-        <ST><![CDATA[TimerGripperOpen(IN:=TRUE, PT:=T#1S);]]></ST>
+        <ST><![CDATA[Timer.GripperLower(IN:=TRUE, PT:=GVL.GRIPPER_LOWER_TIME);
+
+OutputSignals.GripperMotor := - BOOL_TO_INT(NOT Timer.GripperLower.Q);
+
+IF Timer.GripperLower.Q THEN
+	state := States.GRIPPER_CLOSE;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="GRIPPER_OPEN_active" Id="{12264ac5-96a8-41b7-aa00-1dd1bd9e69e7}">
+      <Implementation>
+        <ST><![CDATA[Timer.GripperOpen(IN:=TRUE, PT:=GVL.GRIPPER_OPEN_TIME);
+
+OutputSignals.Gripper := TRUE;
+
+IF Timer.GripperOpen.Q THEN
+	state := States.ROTATE_DISC;
+END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="Init_entry" Id="{f8394b6a-6890-42bc-b48d-484abeb66bcb}">
       <Implementation>
         <ST><![CDATA[Sensor := CylinderInDisc[4];
 
-TimerRotateDisc(IN:=FALSE);
-TimerLinearFW(IN:=FALSE);
-TimerGripperLower(IN:=FALSE);
-TimerGripperOpen(IN:=FALSE);
-TimerGripperClose(IN:=FALSE);
-TimerGripperLift(IN:=FALSE);
-TimerLinearBW(IN:=FALSE);
+Timer.RotateDisc(IN:=FALSE);
+Timer.LinearFW(IN:=FALSE);
+Timer.GripperLower(IN:=FALSE);
+Timer.GripperOpen(IN:=FALSE);
+Timer.GripperClose(IN:=FALSE);
+Timer.GripperLift(IN:=FALSE);
+Timer.LinearBW(IN:=FALSE);
 Reset := CyclesCounter.Q;
-CyclesCounter(CU:=state = States.ROTATE_DISC, RESET := Reset, PV:=INT_TO_WORD(NumberOfSlots));]]></ST>
+CyclesCounter(CU:=state = States.ROTATE_DISC, RESET := Reset, PV:=INT_TO_WORD(GVL.NUMBER_OF_SLOTS));
+]]></ST>
       </Implementation>
     </Action>
     <Action Name="LINEAR_BW_active" Id="{04b344ae-3198-4f12-b7a5-389db0f028f0}">
       <Implementation>
-        <ST><![CDATA[TimerLinearBW(IN:=TRUE, PT:=T#2S);
-IF TimerLinearBW.Q THEN
-	State := States.ROTATE_DISC;
+        <ST><![CDATA[Timer.LinearBW(IN:=TRUE, PT:=GVL.LINEAR_FW_TIME);
+
+OutputSignals.Motor1 := - BOOL_TO_INT(NOT Timer.LinearBW.Q);
+
+IF Timer.LinearBW.Q THEN
+	state := States.GRIPPER_OPEN;
 END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="LINEAR_FW_active" Id="{c6f886f3-66c7-48bf-a531-e24bbdd03a9a}">
       <Implementation>
-        <ST><![CDATA[TimerLinearFW(IN:=TRUE, PT:=T#2S);
-IF TimerLinearFW.Q THEN
-	State := States.GRIPPER_LOWER_AND_OPEN;
+        <ST><![CDATA[Timer.LinearFW(IN:=TRUE, PT:=GVL.LINEAR_FW_TIME);
+
+OutputSignals.Motor1 := BOOL_TO_INT(NOT Timer.LinearFW.Q);
+
+IF Timer.LinearFW.Q THEN
+	state := States.GRIPPER_LOWER;
 END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="ROTATE_DISC_active" Id="{0c13a474-856b-411f-9f0d-bd90afbbad44}">
       <Implementation>
-        <ST><![CDATA[TimerRotateDisc(IN:=TRUE, PT:=T#2S);
+        <ST><![CDATA[Timer.RotateDisc(IN:=TRUE, PT:=GVL.ROTATE_DISC_TIME);
 
-IF TimerRotateDisc.Q THEN
-	TimerRotateDisc(IN:=FALSE);
+OutputSignals.Motor2 := BOOL_TO_INT(NOT Timer.RotateDisc.Q);
+
+IF Timer.RotateDisc.Q THEN
+	Timer.RotateDisc(IN:=FALSE);
 	FOR i:=1 TO 5 BY 1 DO
 		CylinderInDisc[i] := CylinderInDisc[i+1];
 	END_FOR;
 	CylinderInDisc[6] := PutCylinderInSlot6;
 	IF CylinderInDisc[1] THEN
-		State := States.LINEAR_FW;
+		state := States.LINEAR_FW;
 	END_IF	
 END_IF]]></ST>
       </Implementation>
@@ -2077,34 +2041,43 @@ END_IF]]></ST>
         </TypeList>
       </XmlArchive>
     </ObjectProperties>
-    <LineIds Name="StateMachine.GRIPPER_active">
-      <LineId Id="2" Count="2" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
     <LineIds Name="StateMachine.GRIPPER_CLOSE_active">
-      <LineId Id="2" Count="2" />
+      <LineId Id="2" Count="5" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.GRIPPER_LIFT_active">
-      <LineId Id="2" Count="3" />
+      <LineId Id="2" Count="6" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="StateMachine.GRIPPER_LOWER_active">
+      <LineId Id="2" Count="5" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.GRIPPER_OPEN_active">
+      <LineId Id="2" Count="5" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.Init_entry">
       <LineId Id="2" Count="10" />
+      <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.LINEAR_BW_active">
-      <LineId Id="2" Count="2" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="3" Count="1" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.LINEAR_FW_active">
-      <LineId Id="2" Count="2" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="3" Count="1" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.ROTATE_DISC_active">
-      <LineId Id="2" Count="10" />
+      <LineId Id="2" Count="12" />
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="OutputSignals" Id="{dafb8af1-1675-48b1-ba91-f7b6edc27966}">
+    <Declaration><![CDATA[TYPE OutputSignals :
+STRUCT
+	Motor1 : INT; // 1 is forward motion, -1 is backward motion, 0 standstill
+	Motor2 : INT;  // 1 is counterclockwise rotation, -1 is clockwise rotation, 0 standstill
+	GripperMotor : INT; // 1 is lift, -1 is lower, 0 is standstill
+	Gripper : BOOL := TRUE; // TRUE when gripper open, FALSE when gripper is closed
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

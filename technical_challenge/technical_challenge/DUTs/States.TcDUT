@@ -5,12 +5,13 @@
 {attribute 'strict'}
 TYPE States :
 (
-	ROTATE_DISC := 0,
-	LINEAR_FW := 1,
-	GRIPPER_LOWER_AND_OPEN := 2,
-	GRIPPER_CLOSE := 3,
-	GRIPPER_LIFT := 4,
-	LINEAR_BW := 5
+	GRIPPER_OPEN := 0,
+	ROTATE_DISC := 1,
+	LINEAR_FW := 2,
+	GRIPPER_LOWER := 3,
+	GRIPPER_CLOSE := 4,
+	GRIPPER_LIFT := 5,
+	LINEAR_BW := 6
 );
 END_TYPE
 ]]></Declaration>

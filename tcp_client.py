@@ -1,7 +1,8 @@
 import socket
+from ctypes import c_int32
 
 client_socket = socket.socket()
-server_address = '192.168.108.47'
+server_address = '192.168.5.106'
 server_port = 9999
 
 def client_connection():
@@ -13,9 +14,15 @@ def client_connection():
         exit()
 
 def bit_status():
-    client_socket.send('bit_status'.encode('utf8'))
-    data_out = client_socket.recv(1024)
-    print(data_out.decode('utf8'))
+    # If client send 100 then server will respond with 0 or 1. If client send any other value, client will respond the same value
+    client_socket.send(c_int32(100))
+    data_out = client_socket.recv(4) # receive 4 Bytes = 32 bits at a time
+    data_out_decoded = int.from_bytes(
+        data_out,
+        byteorder="little",
+        signed=False,
+    )
+    print(data_out_decoded)
 
 def main():
     client_connection()

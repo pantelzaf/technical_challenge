@@ -42,10 +42,6 @@ ELSE
 	SocketCloseAll(bExecute :=FALSE);
 END_IF
 
-IF SendData = 100 THEN
-	SendData := 100;
-END_IF
-
 timer(PT:=T#100MS);
 
 SocketListen(
@@ -148,7 +144,8 @@ END_CASE
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_TCPServer">
-      <LineId Id="3724" Count="109" />
+      <LineId Id="3724" Count="5" />
+      <LineId Id="3734" Count="99" />
       <LineId Id="431" Count="0" />
     </LineIds>
   </POU>

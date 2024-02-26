@@ -16,9 +16,7 @@ VAR
 	// If start becomes false after a cycle has started, the mechanism will finish the cycle and then it will not start a new one (cycle).
 	Start: BOOL:=FALSE;
 	
-	CyclesCounter: CTU;
-	TotalCyclesCounter : INT:=0;
-	Reset : BOOL;
+	TotalNumberCylindersPicked : INT:=0;
 	CylinderInDisc : ARRAY[1..6] OF BOOL := [FALSE,5(TRUE)]; // Buffer array that tracks if there is a cylinder on a slot, and slides its elements when disc rotates
 	Sensor: BOOL:= CylinderInDisc[GVL.SENSOR_POSITION_IN_DISC]; // Sensor is placed in front of slot 4
 	// The variable PutCylinderInSlot6 simulates incoming cylinders in the disc. If a new cylinder is added, it will take the 6th slot
@@ -1875,6 +1873,7 @@ OutputSignals.GripperMotor := BOOL_TO_INT(NOT Timer.GripperLift.Q);
 
 IF Timer.GripperLift.Q THEN
 	CylinderInDisc[1] := FALSE;
+	TotalNumberCylindersPicked := TotalNumberCylindersPicked + 1;
 	state := States.LINEAR_BW;
 END_IF]]></ST>
       </Implementation>
@@ -1912,9 +1911,8 @@ Timer.GripperOpen(IN:=FALSE);
 Timer.GripperClose(IN:=FALSE);
 Timer.GripperLift(IN:=FALSE);
 Timer.LinearBW(IN:=FALSE);
-Reset := CyclesCounter.Q;
-CyclesCounter(CU:=state = States.ROTATE_DISC, RESET := Reset, PV:=INT_TO_WORD(GVL.NUMBER_OF_SLOTS));
-]]></ST>
+
+//CyclesCounter := TotalCyclesCounter MOD GVL.NUMBER_OF_SLOTS;]]></ST>
       </Implementation>
     </Action>
     <Action Name="LINEAR_BW_active" Id="{04b344ae-3198-4f12-b7a5-389db0f028f0}">
@@ -2057,7 +2055,9 @@ END_IF]]></ST>
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.GRIPPER_LIFT_active">
-      <LineId Id="2" Count="6" />
+      <LineId Id="2" Count="5" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="8" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.GRIPPER_LOWER_active">
@@ -2069,8 +2069,9 @@ END_IF]]></ST>
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.Init_entry">
-      <LineId Id="2" Count="10" />
-      <LineId Id="1" Count="0" />
+      <LineId Id="2" Count="8" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="12" Count="0" />
     </LineIds>
     <LineIds Name="StateMachine.LINEAR_BW_active">
       <LineId Id="2" Count="5" />

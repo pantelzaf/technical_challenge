@@ -13,7 +13,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{056425DA-752F-4E0D-821B-F52E309373AD}" Name="technical_challenge" PrjFilePath="technical_challenge\technical_challenge.plcproj" TmcFilePath="technical_challenge\technical_challenge.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="technical_challenge\technical_challenge.tmc" TmcHash="{E42C7A48-C502-E491-D3F1-987BCDEFAE97}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="technical_challenge\technical_challenge.tmc" TmcHash="{C0EACFD1-91BB-6395-C791-3F839DA67C3A}">
 					<Name>technical_challenge Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>

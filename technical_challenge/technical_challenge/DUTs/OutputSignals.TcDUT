@@ -7,6 +7,8 @@ STRUCT
 	Motor2 : INT;  // 1 is counterclockwise rotation, -1 is clockwise rotation, 0 standstill
 	GripperMotor : INT; // 1 is lift, -1 is lower, 0 is standstill
 	Gripper : BOOL := TRUE; // TRUE when gripper open, FALSE when gripper is closed
+	// The above selection of values is indicative, and not actually signals that will be send to the Motors. The values just show 
+	// whether a motor is energized (zero or non-zero) and in which direction is energized (-1, 1) in order to showcase forward or reverse direction of motor rotation
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -6,6 +6,7 @@ VAR_GLOBAL
 	NUMBER_OF_SLOTS : INT := 6;
 	SENSOR_POSITION_IN_DISC : INT := 4;
 	
+	// All the timeouts of the individual states are defined below as constants
 	ROTATE_DISC_TIME: TIME := T#1S;
 	LINEAR_FW_TIME: TIME := T#1500MS;
 	GRIPPER_LOWER_TIME: TIME := T#1S;

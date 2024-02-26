@@ -4,66 +4,52 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	StateMachine: StateMachine;
-	fbServer : FB_TCPServer;
+	TCPServer : FB_TCPServer;
 	
-	SrvNetId : STRING := '';
-	ServerPort : UDINT := 9999;
-	ServerAddress : STRING := '192.168.108.47';
+	ServerNetworkId : STRING := '';
 	
-	SResponse : STRING;
-	SCommand : STRING;
-	Received_data : STRING;
+	// We use DWORD data type as it is 32-bit. We could use other data type also, this is just one option.
+	SResponse : DWORD;
+	SCommand : DWORD;
+	ReceivedData : STRING;
 	
 	Busy : BOOL;
 	Error : BOOL;
-	ErrId : UDINT;
+	ErrorId : UDINT;
 	
-	Toggle_Timer :TON;
-	Mem_Bit AT %MX0.0 : BOOL :=FALSE;
+	ToggleTimer : TON;
+	ToggleBit : BOOL := FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[StateMachine(OutputSignals=> );
 
-fbServer(
-	send_data:= SResponse, 
-	NetId:= SrvNetId, 
-	Server_Address:= ServerAddress, 
-	Server_Port:= ServerPort, 
+TCPServer(
+	SendData:= SResponse, 
+	ServerNetworkId:= ServerNetworkId, 
+	ServerAddress:= GVL.TCP_SERVER_ADDRESS, 
+	ServerPort:= GVL.TCP_SERVER_PORT, 
 	Busy=> Busy, 
 	Error=> Error, 
-	Received_Data=> SCommand, 
-	ErrId=> ErrId);
+	ReceivedData=> SCommand, 
+	ErrorId=> ErrorId);
 
-Toggle_Timer(IN:= NOT Toggle_Timer.Q, PT:= T#1000MS);
-Mem_Bit := Toggle_Timer.ET > T#500MS;
+ToggleTimer(IN:= NOT ToggleTimer.Q, PT:= T#1000MS);
+ToggleBit := ToggleTimer.ET > GVL.TOGGLE_BIT_TIME;
 
 SResponse := SCommand;
 
-IF SCommand = 'bit_status' THEN
-	IF Mem_Bit THEN
-		SResponse := 'BIT ON';
+IF SCommand = 100 THEN
+	IF ToggleBit THEN
+		SResponse := 1;
 	ELSE
-		SResponse := 'BIT OFF';
+		SResponse := 0;
 	END_IF
 END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="468" Count="1" />
-      <LineId Id="425" Count="7" />
-      <LineId Id="404" Count="0" />
-      <LineId Id="433" Count="0" />
-      <LineId Id="435" Count="1" />
-      <LineId Id="438" Count="0" />
-      <LineId Id="437" Count="0" />
-      <LineId Id="441" Count="0" />
-      <LineId Id="440" Count="0" />
-      <LineId Id="442" Count="0" />
-      <LineId Id="444" Count="0" />
-      <LineId Id="446" Count="1" />
-      <LineId Id="445" Count="0" />
-      <LineId Id="443" Count="0" />
+      <LineId Id="785" Count="23" />
       <LineId Id="434" Count="0" />
     </LineIds>
   </POU>

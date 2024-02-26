@@ -3,142 +3,142 @@
   <POU Name="FB_TCPServer" Id="{eaed78c2-34d1-42b7-98f4-b58fa196fe7c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_TCPServer
 VAR_INPUT
-	send_data : STRING;
-	NetId : STRING;
-	Server_Address : STRING;
-	Server_Port : UDINT;
+	SendData : DWORD;
+	ServerNetworkId : STRING;
+	ServerAddress : STRING;
+	ServerPort : UDINT;
 END_VAR
 VAR_OUTPUT
 	Busy : BOOL;
 	Error: BOOL;
-	Received_Data : STRING;
-	ErrId : UDINT;
+	ReceivedData : DWORD;
+	ErrorId : UDINT;
 END_VAR
 VAR
-	fbSocketCloseAll : FB_SocketCloseAll := (sSrvNetID := '', tTimeout:=T#100S);
-	fbSocket_Listen : FB_SocketListen := (bExecute := TRUE);
-	fbSocket_Accept : FB_SocketAccept;
-	fbSocket_Send : FB_SocketSend;
-	fbSocket_Receive : FB_SocketReceive;
+	SocketCloseAll : FB_SocketCloseAll := (sSrvNetID := '', tTimeout:=T#100S);
+	SocketListen : FB_SocketListen := (bExecute := TRUE);
+	SocketAccept : FB_SocketAccept;
+	SocketSend : FB_SocketSend;
+	SocketReceive : FB_SocketReceive;
 	
 	timer : TON := (PT:=T#500MS);
 	
-	Handle_Listener : T_HSOCKET;
-	Handle_Socket : T_HSOCKET;
+	HandleListener : T_HSOCKET;
+	HandleSocket : T_HSOCKET;
 	
-	bCloseAll : BOOL:= TRUE;
-	Connection_Accepted: BOOL;
-	Buffer_data : STRING;
+	CloseAll : BOOL:= TRUE;
+	ConnectionAccepted: BOOL;
+	BufferData : STRING;
 	Timeout : TIME := T#10S;
 	
 	state : E_State;	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bCloseAll THEN
-	bCloseAll := FALSE;
-	fbSocketCloseAll(bExecute :=TRUE);
+      <ST><![CDATA[IF CloseAll THEN
+	CloseAll := FALSE;
+	SocketCloseAll(bExecute :=TRUE);
 ELSE
-	fbSocketCloseAll(bExecute :=FALSE);
+	SocketCloseAll(bExecute :=FALSE);
 END_IF
 
-IF send_data = '' THEN
-	send_data := 'Default  response';
+IF SendData = 100 THEN
+	SendData := 100;
 END_IF
 
 timer(PT:=T#100MS);
 
-fbSocket_Listen(
-	sSrvNetId:= NetId, 
-	sLocalHost:= Server_Address, 
-	nLocalPort:= Server_Port, 
+SocketListen(
+	sSrvNetId:= ServerNetworkId, 
+	sLocalHost:= ServerAddress, 
+	nLocalPort:= ServerPort, 
 	bExecute:= , 
 	tTimeout:= Timeout, 
 	bBusy=> Busy, 
 	bError=> Error, 
-	nErrId=> ErrId, 
-	hListener=> Handle_Listener);
+	nErrId=> ErrorId, 
+	hListener=> HandleListener);
 	
-fbSocket_Accept(
-	sSrvNetId:= NetId, 
-	hListener:= Handle_Listener, 
+SocketAccept(
+	sSrvNetId:= ServerNetworkId, 
+	hListener:= HandleListener, 
 	bExecute:= , 
 	tTimeout:= Timeout, 
-	bAccepted=> Connection_Accepted, 
+	bAccepted=> ConnectionAccepted, 
 	bBusy=> Busy, 
 	bError=> Error, 
-	nErrId=> ErrId, 
-	hSocket=> Handle_Socket);
+	nErrId=> ErrorId, 
+	hSocket=> HandleSocket);
 	
-fbSocket_Send(
-	sSrvNetId:= NetId, 
-	hSocket:= Handle_Socket, 
-	cbLen:= LEN(Send_Data), 
-	pSrc:= ADR(Send_Data), 
+SocketSend(
+	sSrvNetId:= ServerNetworkId, 
+	hSocket:= HandleSocket, 
+	cbLen:= 4, 
+	pSrc:= ADR(SendData), 
 	bExecute:= , 
 	tTimeout:= Timeout, 
 	bBusy=> Busy, 
 	bError=> Error, 
-	nErrId=> ErrId);
+	nErrId=> ErrorId);
 
 	
-fbSocket_Receive(
-	sSrvNetId:= NetId, 
-	hSocket:= Handle_Socket, 
-	cbLen:= SIZEOF(Buffer_Data), 
-	pDest:= ADR(Buffer_Data), 
+SocketReceive(
+	sSrvNetId:= ServerNetworkId, 
+	hSocket:= HandleSocket, 
+	cbLen:= SIZEOF(BufferData), 
+	pDest:= ADR(BufferData), 
 	bExecute:= , 
 	tTimeout:= Timeout, 
 	bBusy=> Busy, 
 	bError=> Error, 
-	nErrId=> ErrId, 
+	nErrId=> ErrorId, 
 	nRecBytes=> );
 	
 	
 
 CASE state OF
 	E_State.STATE_1_Listen:
-		fbSocket_Listen.bExecute := TRUE;
+		SocketListen.bExecute := TRUE;
 		state := E_State.STATE_2_Accept;
 		
 	E_State.STATE_2_Accept:
-		fbsocket_Listen.bExecute := FALSE;
-		IF NOT fbSocket_Listen.bBusy AND NOT fbSocket_Listen.bError THEN
-			fbSocket_Accept.bExecute := FALSE;
+		SocketListen.bExecute := FALSE;
+		IF NOT SocketListen.bBusy AND NOT SocketListen.bError THEN
+			SocketAccept.bExecute := FALSE;
 			timer.IN := TRUE;
-			IF Connection_Accepted THEN
-				fbSocket_Receive.bExecute := TRUE;
+			IF ConnectionAccepted THEN
+				SocketReceive.bExecute := TRUE;
 				state := E_State.STATE_3_Receive;
 			ELSIF timer.Q THEN
-				fbSocket_Accept.bExecute := TRUE;
+				SocketAccept.bExecute := TRUE;
 				timer.IN := FALSE;
 			END_IF
 		END_IF
 		
 	E_State.STATE_3_Receive:
-		fbSocket_Receive.bExecute := FALSE;
-		IF NOT fbSocket_Receive.bBusy AND NOT fbSocket_Receive.bError THEN
-			IF fbSocket_Receive.nRecBytes = 0 THEN
-				fbSocket_Receive.bExecute := TRUE;
+		SocketReceive.bExecute := FALSE;
+		IF NOT SocketReceive.bBusy AND NOT SocketReceive.bError THEN
+			IF SocketReceive.nRecBytes = 0 THEN
+				SocketReceive.bExecute := TRUE;
 			ELSE
 				MEMSET(
-					destAddr := ADR(Received_Data),
+					destAddr := ADR(ReceivedData),
 					fillByte := 0,
-					n := SIZEOF(Received_Data));
+					n := SIZEOF(ReceivedData));
 				MEMCPY (
-					destAddr := ADR(Received_Data),
-					srcAddr := fbSocket_Receive.pDest,
-					n := fbSocket_Receive.nRecBytes);
+					destAddr := ADR(ReceivedData),
+					srcAddr := SocketReceive.pDest,
+					n := SocketReceive.nRecBytes);
 				
-				fbSocket_Send.bExecute := TRUE;
+				SocketSend.bExecute := TRUE;
 				state := E_State.STATE_4_Send;
 			END_IF
 		END_IF
 		
 	E_State.STATE_4_Send:
-		fbSocket_Send.bExecute := FALSE;
-		IF NOT fbSocket_Send.bBusy AND NOT fbSocket_Send.bError THEN
-			fbSocket_Receive.bExecute := TRUE;
+		SocketSend.bExecute := FALSE;
+		IF NOT SocketSend.bBusy AND NOT SocketSend.bError THEN
+			SocketReceive.bExecute := TRUE;
 			state := E_State.STATE_3_Receive;
 		END_IF
 END_CASE
@@ -148,54 +148,7 @@ END_CASE
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_TCPServer">
-      <LineId Id="415" Count="1" />
-      <LineId Id="418" Count="0" />
-      <LineId Id="421" Count="1" />
-      <LineId Id="417" Count="0" />
-      <LineId Id="424" Count="0" />
-      <LineId Id="423" Count="0" />
-      <LineId Id="425" Count="1" />
-      <LineId Id="428" Count="0" />
-      <LineId Id="427" Count="0" />
-      <LineId Id="443" Count="0" />
-      <LineId Id="434" Count="8" />
-      <LineId Id="430" Count="0" />
-      <LineId Id="444" Count="0" />
-      <LineId Id="446" Count="8" />
-      <LineId Id="445" Count="0" />
-      <LineId Id="455" Count="0" />
-      <LineId Id="457" Count="8" />
-      <LineId Id="456" Count="0" />
-      <LineId Id="467" Count="0" />
-      <LineId Id="466" Count="0" />
-      <LineId Id="471" Count="9" />
-      <LineId Id="468" Count="0" />
-      <LineId Id="481" Count="0" />
-      <LineId Id="483" Count="0" />
-      <LineId Id="485" Count="0" />
-      <LineId Id="484" Count="0" />
-      <LineId Id="486" Count="0" />
-      <LineId Id="488" Count="6" />
-      <LineId Id="496" Count="2" />
-      <LineId Id="500" Count="0" />
-      <LineId Id="502" Count="0" />
-      <LineId Id="504" Count="0" />
-      <LineId Id="503" Count="0" />
-      <LineId Id="499" Count="0" />
-      <LineId Id="495" Count="0" />
-      <LineId Id="506" Count="4" />
-      <LineId Id="512" Count="0" />
-      <LineId Id="515" Count="1" />
-      <LineId Id="518" Count="3" />
-      <LineId Id="523" Count="5" />
-      <LineId Id="513" Count="0" />
-      <LineId Id="511" Count="0" />
-      <LineId Id="529" Count="4" />
-      <LineId Id="535" Count="0" />
-      <LineId Id="534" Count="0" />
-      <LineId Id="487" Count="0" />
-      <LineId Id="482" Count="0" />
-      <LineId Id="469" Count="1" />
+      <LineId Id="3724" Count="109" />
       <LineId Id="431" Count="0" />
     </LineIds>
   </POU>
